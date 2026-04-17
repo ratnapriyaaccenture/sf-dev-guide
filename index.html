@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salesforce Developer Reference — Apex, LWC, Projects & Certifications</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sf-blue:#0176D3;--sf-dark:#032D60;--sf-green:#04844B;--sf-red:#BA0517;--sf-orange:#FE9339;--sf-purple:#7B5EA7;
+  --bg:#F4F6F9;--sidebar-bg:#032D60;--card-bg:#fff;--text:#1a1a2e;--muted:#6B7280;
+  --border:#E5E7EB;--tag-bg:#EFF6FF;--tag-text:#0176D3;
+  --limit-bg:#FFF7ED;--limit-text:#9A3412;--opt-bg:#F0FDF4;--opt-text:#166534;
+  --best-bg:#EFF6FF;--best-text:#1D4ED8;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;min-height:100vh}
+/* HEADER */
+.header{background:linear-gradient(135deg,var(--sf-dark) 0%,#0C4A9E 100%);color:#fff;padding:0 24px;height:60px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.header-logo{font-size:22px;font-weight:800;letter-spacing:-0.5px;white-space:nowrap}
+.header-logo span{color:#4FC3F7}
+.search-box{flex:1;max-width:480px;position:relative}
+.search-box input{width:100%;padding:8px 16px 8px 40px;border:none;border-radius:24px;background:rgba(255,255,255,.15);color:#fff;font-size:14px;outline:none;transition:background .2s}
+.search-box input::placeholder{color:rgba(255,255,255,.6)}
+.search-box input:focus{background:rgba(255,255,255,.25)}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.7;font-size:15px}
+.theme-btn{background:rgba(255,255,255,.15);border:none;color:#fff;padding:7px 14px;border-radius:20px;cursor:pointer;font-size:13px}
+/* LAYOUT */
+.layout{display:flex;flex:1;overflow:hidden}
+/* SIDEBAR */
+.sidebar{width:280px;background:var(--sidebar-bg);color:#fff;overflow-y:auto;flex-shrink:0;padding-bottom:32px}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:4px}
+.nav-section{margin-top:4px}
+.nav-section-header{padding:10px 20px 4px;font-size:10px;font-weight:700;letter-spacing:1.4px;color:rgba(255,255,255,.4);text-transform:uppercase}
+.nav-group-btn{width:100%;text-align:left;background:none;border:none;color:rgba(255,255,255,.85);padding:10px 20px;cursor:pointer;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;transition:background .15s}
+.nav-group-btn:hover{background:rgba(255,255,255,.08)}
+.nav-group-btn.active{background:rgba(1,118,211,.4);color:#fff}
+.nav-group-btn .arrow{margin-left:auto;font-size:11px;transition:transform .2s}
+.nav-group-btn.open .arrow{transform:rotate(90deg)}
+.nav-items{display:none}
+.nav-items.open{display:block}
+.nav-item{display:block;width:100%;text-align:left;background:none;border:none;color:rgba(255,255,255,.7);padding:7px 20px 7px 44px;cursor:pointer;font-size:12.5px;transition:all .15s;border-left:3px solid transparent}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-item.active{background:rgba(1,118,211,.25);color:#4FC3F7;border-left-color:#4FC3F7;font-weight:600}
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:24px}
+.content::-webkit-scrollbar{width:6px}
+.content::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px}
+/* CATEGORY HERO */
+.category-hero{background:linear-gradient(135deg,var(--sf-dark),#0C4A9E);color:#fff;border-radius:16px;padding:28px 32px;margin-bottom:24px}
+.category-hero h1{font-size:26px;font-weight:800;margin-bottom:6px}
+.category-hero p{opacity:.85;font-size:14px;max-width:600px;line-height:1.6}
+.stats-row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.stat-chip{background:rgba(255,255,255,.15);border-radius:10px;padding:6px 14px;font-size:12px;font-weight:600}
+/* TOPIC CARD */
+.topic-card{background:var(--card-bg);border-radius:14px;border:1px solid var(--border);margin-bottom:24px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.topic-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px}
+.topic-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--sf-blue),#0C4A9E);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.topic-meta{flex:1}
+.topic-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.topic-desc{font-size:13.5px;color:var(--muted);line-height:1.6}
+.topic-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tag{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:var(--tag-bg);color:var(--tag-text)}
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:#FAFAFA;padding:0 16px;overflow-x:auto;flex-wrap:nowrap}
+.tab-btn{padding:10px 14px;background:none;border:none;font-size:12.5px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all .15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--sf-blue);border-bottom-color:var(--sf-blue);font-weight:700}
+.tab-content{display:none;padding:24px}
+.tab-content.active{display:block}
+/* SYNTAX BOX */
+.syntax-box{background:#0D1117;border-radius:10px;padding:14px 18px;margin-bottom:16px;overflow:auto}
+.syntax-box pre{margin:0;font-family:'Fira Code','Consolas',monospace;font-size:12.5px;color:#E6EDF3;line-height:1.7}
+.syntax-label{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+/* CODE BLOCK */
+.code-wrap{position:relative;margin-bottom:8px}
+.code-wrap pre{border-radius:0 0 10px 10px;margin:0;font-size:13px}
+.code-wrap code{font-family:'Fira Code','Consolas',monospace!important;font-size:12.5px!important;line-height:1.7!important}
+.code-header{display:flex;align-items:center;justify-content:space-between;background:#1E2A3A;padding:8px 16px;border-radius:10px 10px 0 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.code-header-label{font-size:12px;color:#8B949E;font-weight:600}
+.copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#C9D1D9;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:12px;transition:all .15s}
+.copy-btn:hover{background:rgba(255,255,255,.2)}
+.copy-btn.copied{background:rgba(4,132,75,.3);color:#6EE7B7;border-color:#6EE7B7}
+/* LISTS */
+.info-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.info-list li{padding:10px 14px;border-radius:8px;font-size:13.5px;line-height:1.6;display:flex;align-items:flex-start;gap:10px}
+.info-list li::before{flex-shrink:0;margin-top:2px;font-size:14px}
+.best-list li{background:var(--best-bg);color:var(--best-text)}
+.best-list li::before{content:"✓"}
+.limit-list li{background:var(--limit-bg);color:var(--limit-text)}
+.limit-list li::before{content:"⚠"}
+.opt-list li{background:var(--opt-bg);color:var(--opt-text)}
+.opt-list li::before{content:"⚡"}
+/* CALLOUT */
+.callout{border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:13.5px;line-height:1.6}
+.callout-info{background:#EFF6FF;border-left:4px solid var(--sf-blue);color:#1E40AF}
+.callout-warn{background:#FFF7ED;border-left:4px solid var(--sf-orange);color:#9A3412}
+.callout-success{background:#F0FDF4;border-left:4px solid var(--sf-green);color:#166534}
+.callout b{font-weight:700}
+/* PROJECT BADGE */
+.project-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#667EEA,#764BA2);color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:12px}
+/* SEARCH */
+.search-highlight{background:#FEF3C7;color:#92400E;border-radius:2px;padding:0 2px}
+/* HOME */
+.home-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-bottom:28px}
+.home-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:22px;cursor:pointer;transition:all .2s;display:block}
+.home-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12);border-color:var(--sf-blue)}
+.home-card-icon{font-size:36px;margin-bottom:12px}
+.home-card h2{font-size:17px;font-weight:700;margin-bottom:6px}
+.home-card p{font-size:13px;color:var(--muted);line-height:1.5}
+.home-card-count{margin-top:10px;font-size:12px;font-weight:700;color:var(--sf-blue)}
+.home-banner{background:linear-gradient(135deg,#032D60,#0C4A9E 40%,#0176D3);color:#fff;border-radius:16px;padding:32px;margin-bottom:24px;text-align:center}
+.home-banner h1{font-size:30px;font-weight:800;margin-bottom:8px}
+.home-banner p{opacity:.85;font-size:14px;max-width:560px;margin:0 auto 16px}
+
+/* ═══════════════════════════════════════
+   PROJECT IDEAS STYLES
+═══════════════════════════════════════ */
+.product-hero{border-radius:16px;padding:28px 32px;margin-bottom:24px;color:#fff}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.product-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:20px;cursor:pointer;transition:all .2s;border-top:4px solid var(--sf-blue)}
+.product-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.product-card-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.product-card-icon{font-size:28px}
+.product-card h3{font-size:16px;font-weight:700}
+.product-card p{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.project-count-badge{font-size:11px;font-weight:700;color:var(--sf-blue);background:var(--tag-bg);padding:3px 10px;border-radius:20px}
+
+/* Project detail */
+.project-overview-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.project-meta-row{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0}
+.project-meta-item{background:#F8FAFF;border:1px solid #DBEAFE;border-radius:10px;padding:10px 16px;font-size:13px}
+.project-meta-item b{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;font-weight:700}
+.tech-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tech-tag{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;background:linear-gradient(135deg,#EDE9FE,#DDD6FE);color:#5B21B6}
+.steps-section{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.steps-section h3{font-size:16px;font-weight:700;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.step-item{display:flex;gap:16px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.step-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.step-num{width:34px;height:34px;min-width:34px;border-radius:50%;background:linear-gradient(135deg,var(--sf-blue),#0C4A9E);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.step-content h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.step-content p{font-size:13px;color:var(--muted);line-height:1.6}
+.approach-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.arch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:14px}
+.arch-item{background:#F8FAFF;border:1px solid #DBEAFE;border-radius:10px;padding:14px}
+.arch-item h4{font-size:13px;font-weight:700;margin-bottom:6px;color:var(--sf-blue)}
+.arch-item p{font-size:12px;color:var(--muted);line-height:1.5}
+.deliverables-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.deliverables-list li{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#F0FDF4;border-radius:8px;font-size:13.5px;color:#166534}
+.deliverables-list li::before{content:"✅";flex-shrink:0}
+.proj-nav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:20px}
+.proj-nav-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;border-left:4px solid var(--sf-blue)}
+.proj-nav-card:hover{background:#EFF6FF;transform:translateX(4px)}
+.proj-nav-card h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.proj-nav-card p{font-size:12px;color:var(--muted)}
+
+/* ═══════════════════════════════════════
+   CERTIFICATION STYLES
+═══════════════════════════════════════ */
+.cert-hero{background:linear-gradient(135deg,#1E1B4B,#4338CA);color:#fff;border-radius:16px;padding:28px 32px;margin-bottom:24px}
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.cert-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:20px;cursor:pointer;transition:all .2s;border-top:4px solid #6366F1}
+.cert-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.cert-badge{width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,#4338CA,#7C3AED);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px}
+.cert-card h3{font-size:15px;font-weight:700;margin-bottom:6px}
+.cert-card p{font-size:12.5px;color:var(--muted);line-height:1.5}
+.exam-stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.exam-stat{background:#F5F3FF;color:#4338CA;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700}
+
+/* Cert detail */
+.exam-info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.exam-info-box{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.exam-info-box .val{font-size:24px;font-weight:800;color:#4338CA;margin-bottom:4px}
+.exam-info-box .lbl{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.topic-weight-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.topic-weight-item{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.topic-weight-item .tw-name{font-size:13.5px;font-weight:600}
+.topic-weight-item .tw-bar-bg{flex:1;margin:0 16px;height:8px;background:#E5E7EB;border-radius:4px;overflow:hidden}
+.topic-weight-item .tw-bar{height:100%;background:linear-gradient(90deg,#4338CA,#7C3AED);border-radius:4px}
+.topic-weight-item .tw-pct{font-size:13px;font-weight:700;color:#4338CA;width:36px;text-align:right}
+
+/* Q&A Styles */
+.qa-section{margin-top:8px}
+.qa-header-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.qa-header-bar h3{font-size:16px;font-weight:700}
+.qa-progress{font-size:13px;color:var(--muted)}
+.qa-item{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px;transition:border-color .2s}
+.qa-item.answered{border-color:#4338CA}
+.qa-num{font-size:11px;font-weight:700;color:#6366F1;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.qa-q{font-size:14.5px;font-weight:600;line-height:1.6;margin-bottom:16px}
+.qa-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.qa-opt{width:100%;text-align:left;background:#F9FAFB;border:2px solid var(--border);border-radius:10px;padding:10px 16px;cursor:pointer;font-size:13.5px;transition:all .15s;display:flex;align-items:center;gap:10px}
+.qa-opt:hover:not(:disabled){background:#EFF6FF;border-color:var(--sf-blue)}
+.qa-opt.correct{background:#F0FDF4;border-color:#16A34A;color:#166534}
+.qa-opt.wrong{background:#FEF2F2;border-color:#DC2626;color:#991B1B}
+.qa-opt .opt-letter{width:26px;height:26px;min-width:26px;border-radius:50%;background:#E5E7EB;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+.qa-opt.correct .opt-letter{background:#16A34A;color:#fff}
+.qa-opt.wrong .opt-letter{background:#DC2626;color:#fff}
+.qa-opt:disabled{cursor:default}
+.qa-exp{background:#F5F3FF;border:1px solid #C4B5FD;border-radius:10px;padding:12px 16px;font-size:13px;line-height:1.6;color:#3730A3;margin-top:8px;display:none}
+.qa-exp.visible{display:block}
+.qa-exp b{color:#4338CA}
+.qa-reveal-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;color:var(--muted);margin-top:8px}
+.qa-reveal-btn:hover{background:#F5F3FF;color:#4338CA;border-color:#A5B4FC}
+.study-tips-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.study-tips-list li{padding:10px 14px;background:#F5F3FF;border-radius:8px;font-size:13.5px;color:#3730A3;display:flex;align-items:flex-start;gap:10px;line-height:1.6}
+.study-tips-list li::before{content:"📌";flex-shrink:0}
+
+/* DARK MODE */
+body.dark{--bg:#0D1117;--card-bg:#161B22;--text:#E6EDF3;--muted:#8B949E;--border:#30363D;--tag-bg:#1C2128;--tag-text:#79C0FF;--best-bg:#0D2040;--best-text:#79C0FF;--limit-bg:#2A1A0A;--limit-text:#FFA657;--opt-bg:#0A2018;--opt-text:#7EE787}
+body.dark .tabs{background:#161B22}
+body.dark .sidebar{background:#010409}
+body.dark .home-card,.dark .topic-card,.dark .product-card,.dark .cert-card,.dark .proj-nav-card,.dark .qa-item,.dark .exam-info-box,.dark .topic-weight-item,.dark .step-item,.dark .project-overview-card,.dark .steps-section,.dark .approach-card{background:#161B22}
+body.dark .qa-opt{background:#1C2128;border-color:#30363D;color:#E6EDF3}
+body.dark .project-meta-item,.dark .arch-item{background:#1C2128;border-color:#30363D}
+body.dark .syntax-box pre{color:#E6EDF3}
+@media(max-width:640px){.layout{flex-direction:column}.sidebar{width:100%;max-height:240px}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-logo">☁️ SF <span>Dev Guide</span></div>
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search topics, certifications, projects…" autocomplete="off">
+  </div>
+  <button class="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
+</div>
+<div class="layout">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="content" id="main"></main>
+</div>
+
+<!-- ═══════════ DATA — Apex Classes, Triggers, LWC ═══════════ -->
+<script src="data-apex.js"></script>
+<!-- ═══════════ DATA — Projects ═══════════ -->
+<script src="data-projects.js"></script>
+<!-- ═══════════ DATA — Certifications ═══════════ -->
+<script src="data-certs.js"></script>
+
+<script>
+// ──────────────────────────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────────────────────────
+let activeMode     = 'home';  // home | apex | projects | certs
+let currentSection = null;
+let currentTopicId = null;
+let currentProduct = null;
+let currentProject = null;
+let currentCert    = null;
+
+// ──────────────────────────────────────────────────────────────
+// SIDEBAR
+// ──────────────────────────────────────────────────────────────
+function renderSidebar() {
+  const sb = document.getElementById('sidebar');
+  let h = '<div style="padding:14px 20px 6px"><strong style="color:#fff;font-size:15px">☁️ SF Dev Guide</strong></div>';
+
+  // ── Apex / LWC ──
+  h += '<div class="nav-section-header">Developer Reference</div>';
+  Object.values(DATA).forEach(sec => {
+    const open = activeMode === 'apex' && currentSection === sec.id;
+    h += `<div class="nav-section">
+      <button class="nav-group-btn ${open?'active open':''}" onclick="sidebarSection('${sec.id}')">
+        <span>${sec.icon}</span><span>${sec.title}</span><span class="arrow">▶</span>
+      </button>
+      <div class="nav-items ${open?'open':''}">`;
+    sec.topics.forEach(t => {
+      h += `<button class="nav-item ${currentTopicId===t.id?'active':''}" onclick="showTopic('${sec.id}','${t.id}')">${t.title}</button>`;
+    });
+    h += '</div></div>';
+  });
+
+  // ── Projects ──
+  h += '<div class="nav-section-header">Project Ideas</div>';
+  const projOpen = activeMode === 'projects';
+  h += `<div class="nav-section">
+    <button class="nav-group-btn ${projOpen?'active open':''}" onclick="sidebarProjects()">
+      <span>🏗️</span><span>Project Ideas</span><span class="arrow">▶</span>
+    </button>
+    <div class="nav-items ${projOpen?'open':''}">`;
+  Object.values(PRODUCTS).forEach(prod => {
+    h += `<button class="nav-item ${currentProduct===prod.id?'active':''}" onclick="showProductProjects('${prod.id}')">${prod.icon} ${prod.title}</button>`;
+  });
+  h += '</div></div>';
+
+  // ── Certifications ──
+  h += '<div class="nav-section-header">Certifications</div>';
+  const certOpen = activeMode === 'certs';
+  h += `<div class="nav-section">
+    <button class="nav-group-btn ${certOpen?'active open':''}" onclick="sidebarCerts()">
+      <span>🏆</span><span>Certifications</span><span class="arrow">▶</span>
+    </button>
+    <div class="nav-items ${certOpen?'open':''}">`;
+  Object.values(CERTS).forEach(c => {
+    h += `<button class="nav-item ${currentCert===c.id?'active':''}" onclick="showCert('${c.id}')">${c.icon} ${c.title}</button>`;
+  });
+  h += '</div></div>';
+
+  sb.innerHTML = h;
+}
+
+function sidebarSection(id){ activeMode='apex'; currentSection=id; currentTopicId=null; showSection(id); }
+function sidebarProjects(){ activeMode='projects'; currentProduct=null; showProjectsHome(); }
+function sidebarCerts(){ activeMode='certs'; currentCert=null; showCertsHome(); }
+
+// ──────────────────────────────────────────────────────────────
+// HOME
+// ──────────────────────────────────────────────────────────────
+function renderHome() {
+  activeMode='home'; currentSection=null; currentTopicId=null; currentProduct=null; currentCert=null;
+  const main = document.getElementById('main');
+  const totalTopics = Object.values(DATA).reduce((n,s)=>n+s.topics.length,0);
+  const totalProj   = Object.values(PRODUCTS).reduce((n,p)=>n+p.projects.length,0);
+  const totalQ      = Object.values(CERTS).reduce((n,c)=>n+c.questions.length,0);
+
+  let h = `
+  <div class="home-banner">
+    <h1>☁️ Salesforce Developer Reference</h1>
+    <p>Comprehensive guide to Apex, LWC, real-world project ideas across all Salesforce clouds, and full certification prep with Q&amp;A practice.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+      <span style="background:rgba(255,255,255,.2);padding:5px 14px;border-radius:20px;font-size:12px">${totalTopics} Dev Topics</span>
+      <span style="background:rgba(255,255,255,.2);padding:5px 14px;border-radius:20px;font-size:12px">${totalProj} Project Ideas</span>
+      <span style="background:rgba(255,255,255,.2);padding:5px 14px;border-radius:20px;font-size:12px">${Object.keys(CERTS).length} Certifications</span>
+      <span style="background:rgba(255,255,255,.2);padding:5px 14px;border-radius:20px;font-size:12px">${totalQ} Practice Q&amp;A</span>
+    </div>
+  </div>
+  <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Developer Reference</div>
+  <div class="home-grid">`;
+  Object.values(DATA).forEach(s => {
+    h += `<div class="home-card" onclick="sidebarSection('${s.id}')">
+      <div class="home-card-icon">${s.icon}</div>
+      <h2>${s.title}</h2><p>${s.desc}</p>
+      <div class="home-card-count">${s.topics.length} topics →</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:10px">${s.stats.map(x=>`<span style="background:#EFF6FF;color:#1D4ED8;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">${x}</span>`).join('')}</div>
+    </div>`;
+  });
+  h += `</div>
+  <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Project Ideas by Cloud</div>
+  <div class="home-grid">`;
+  Object.values(PRODUCTS).forEach(p => {
+    h += `<div class="home-card" onclick="showProductProjects('${p.id}')" style="border-top:4px solid ${p.color}">
+      <div class="home-card-icon">${p.icon}</div>
+      <h2>${p.title}</h2><p>${p.desc}</p>
+      <div class="home-card-count">${p.projects.length} projects →</div>
+    </div>`;
+  });
+  h += `</div>
+  <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Certification Prep</div>
+  <div class="home-grid">`;
+  Object.values(CERTS).forEach(c => {
+    h += `<div class="home-card" onclick="showCert('${c.id}')" style="border-top:4px solid #6366F1">
+      <div class="home-card-icon">${c.icon}</div>
+      <h2>${c.title}</h2>
+      <p>${c.examInfo.questions} Q • ${c.examInfo.passing}% passing • ${c.examInfo.time}</p>
+      <div class="home-card-count">${c.questions.length} practice questions →</div>
+    </div>`;
+  });
+  h += '</div>';
+  main.innerHTML = h;
+  renderSidebar();
+}
+
+// ──────────────────────────────────────────────────────────────
+// APEX SECTION / TOPIC
+// ──────────────────────────────────────────────────────────────
+function showSection(sectionId) {
+  const sec = DATA[sectionId];
+  activeMode='apex'; currentSection=sectionId; currentTopicId=null;
+  const main = document.getElementById('main');
+  let h = `<div class="category-hero"><h1>${sec.icon} ${sec.title}</h1><p>${sec.desc}</p>
+    <div class="stats-row">${sec.stats.map(s=>`<span class="stat-chip">${s}</span>`).join('')}</div></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">`;
+  sec.topics.forEach(t => {
+    h += `<div class="topic-card" style="cursor:pointer" onclick="showTopic('${sectionId}','${t.id}')">
+      <div class="topic-header">
+        <div class="topic-icon">${t.icon}</div>
+        <div class="topic-meta">
+          <div class="topic-title">${t.title}</div>
+          <div class="topic-desc" style="margin-top:4px">${t.desc.substring(0,90)}…</div>
+          <div class="topic-tags">${t.tags.map(tg=>`<span class="tag">${tg}</span>`).join('')}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+  h += '</div>';
+  main.innerHTML = h; renderSidebar();
+}
+
+function showTopic(sectionId, topicId) {
+  const sec   = DATA[sectionId];
+  const topic = sec.topics.find(t=>t.id===topicId);
+  activeMode='apex'; currentSection=sectionId; currentTopicId=topicId;
+  const main = document.getElementById('main');
+  const tid   = topicId;
+  main.innerHTML = `
+    <div style="margin-bottom:12px">
+      <button onclick="showSection('${sectionId}')" style="background:none;border:none;color:var(--sf-blue);cursor:pointer;font-size:13px">← Back to ${sec.title}</button>
+    </div>
+    <div class="topic-card">
+      <div class="topic-header">
+        <div class="topic-icon" style="width:52px;height:52px;font-size:24px">${topic.icon}</div>
+        <div class="topic-meta">
+          <div class="topic-title" style="font-size:20px">${topic.title}</div>
+          <div class="topic-desc" style="margin-top:6px">${topic.desc}</div>
+          <div class="topic-tags" style="margin-top:10px">${topic.tags.map(tg=>`<span class="tag">${tg}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-${tid}-overview"  onclick="switchTab('${tid}','overview')">📋 Overview</button>
+        <button class="tab-btn"        id="tab-${tid}-example"   onclick="switchTab('${tid}','example')">💻 Code Example</button>
+        <button class="tab-btn"        id="tab-${tid}-best"      onclick="switchTab('${tid}','best')">✅ Best Practices</button>
+        <button class="tab-btn"        id="tab-${tid}-limits"    onclick="switchTab('${tid}','limits')">⚠️ Gov. Limits</button>
+        <button class="tab-btn"        id="tab-${tid}-opt"       onclick="switchTab('${tid}','opt')">⚡ Optimization</button>
+      </div>
+      <div class="tab-content active" id="tc-${tid}-overview">
+        <div class="syntax-label">Syntax</div>
+        <div class="syntax-box"><pre>${escHtml(topic.syntax)}</pre></div>
+        <div class="callout callout-info"><b>When to use:</b> ${topic.desc}</div>
+      </div>
+      <div class="tab-content" id="tc-${tid}-example">
+        <div class="project-badge">🏗️ Project: ${topic.projectLabel}</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-header-label">Apex / LWC</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre style="border-radius:0 0 10px 10px;margin:0"><code class="language-java">${escHtml(topic.example)}</code></pre>
+        </div>
+      </div>
+      <div class="tab-content" id="tc-${tid}-best">
+        <ul class="info-list best-list">${topic.best.map(b=>`<li>${b}</li>`).join('')}</ul>
+      </div>
+      <div class="tab-content" id="tc-${tid}-limits">
+        <div class="callout callout-warn" style="margin-bottom:16px"><b>Governor Limits</b> are enforced per Apex transaction to ensure fair multi-tenant use.</div>
+        <ul class="info-list limit-list">${topic.limits.map(l=>`<li>${l}</li>`).join('')}</ul>
+      </div>
+      <div class="tab-content" id="tc-${tid}-opt">
+        <div class="callout callout-success" style="margin-bottom:16px"><b>Performance Tips</b> — stay well within limits and build scalable solutions.</div>
+        <ul class="info-list opt-list">${topic.opt.map(o=>`<li>${o}</li>`).join('')}</ul>
+      </div>
+    </div>
+    ${renderPrevNext(sectionId,topicId)}`;
+  renderSidebar();
+  document.querySelectorAll('pre code').forEach(b=>hljs.highlightElement(b));
+  window.scrollTo(0,0);
+}
+
+function renderPrevNext(sectionId,topicId){
+  const topics=DATA[sectionId].topics, idx=topics.findIndex(t=>t.id===topicId);
+  const prev=idx>0?topics[idx-1]:null, next=idx<topics.length-1?topics[idx+1]:null;
+  let h='<div style="display:flex;gap:12px;margin-top:16px">';
+  if(prev) h+=`<button onclick="showTopic('${sectionId}','${prev.id}')" style="flex:1;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:12px 16px;cursor:pointer;text-align:left;color:var(--text)"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">← Previous</div><div style="font-weight:600">${prev.title}</div></button>`;
+  if(next) h+=`<button onclick="showTopic('${sectionId}','${next.id}')" style="flex:1;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:12px 16px;cursor:pointer;text-align:right;color:var(--text)"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Next →</div><div style="font-weight:600">${next.title}</div></button>`;
+  return h+'</div>';
+}
+
+function switchTab(topicId,tab){
+  ['overview','example','best','limits','opt'].forEach(t=>{
+    const b=document.getElementById(`tab-${topicId}-${t}`), c=document.getElementById(`tc-${topicId}-${t}`);
+    if(b) b.classList.toggle('active',t===tab);
+    if(c) c.classList.toggle('active',t===tab);
+  });
+  document.querySelectorAll('pre code').forEach(b=>hljs.highlightElement(b));
+}
+
+// ──────────────────────────────────────────────────────────────
+// PROJECTS
+// ──────────────────────────────────────────────────────────────
+function showProjectsHome() {
+  activeMode='projects'; currentProduct=null; currentProject=null;
+  const main=document.getElementById('main');
+  let h=`<div class="category-hero">
+    <h1>🏗️ Salesforce Project Ideas</h1>
+    <p>Real-world project concepts across all major Salesforce clouds — with implementation steps, tech stack, architecture approach, and deliverables.</p>
+    <div class="stats-row">
+      ${Object.values(PRODUCTS).map(p=>`<span class="stat-chip">${p.icon} ${p.title}</span>`).join('')}
+    </div>
+  </div>
+  <div class="product-grid">`;
+  Object.values(PRODUCTS).forEach(p=>{
+    h+=`<div class="product-card" onclick="showProductProjects('${p.id}')" style="border-top-color:${p.color}">
+      <div class="product-card-header">
+        <div class="product-card-icon">${p.icon}</div>
+        <h3>${p.title}</h3>
+      </div>
+      <p>${p.desc}</p>
+      <span class="project-count-badge">${p.projects.length} Projects →</span>
+    </div>`;
+  });
+  h+='</div>';
+  main.innerHTML=h; renderSidebar();
+}
+
+function showProductProjects(productId) {
+  const prod=PRODUCTS[productId];
+  activeMode='projects'; currentProduct=productId; currentProject=null;
+  const main=document.getElementById('main');
+  let h=`<div style="margin-bottom:12px">
+    <button onclick="showProjectsHome()" style="background:none;border:none;color:var(--sf-blue);cursor:pointer;font-size:13px">← Back to All Products</button>
+  </div>
+  <div class="product-hero" style="background:linear-gradient(135deg,${prod.darkColor||'#032D60'},${prod.color})">
+    <div style="font-size:40px;margin-bottom:10px">${prod.icon}</div>
+    <h1 style="font-size:24px;font-weight:800;margin-bottom:6px">${prod.title} Projects</h1>
+    <p style="opacity:.85;font-size:14px;max-width:600px;line-height:1.6">${prod.desc}</p>
+    <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+      ${prod.tags.map(t=>`<span style="background:rgba(255,255,255,.2);padding:4px 12px;border-radius:20px;font-size:12px">${t}</span>`).join('')}
+    </div>
+  </div>
+  <div class="proj-nav-grid">`;
+  prod.projects.forEach((p,i)=>{
+    h+=`<div class="proj-nav-card" onclick="showProjectDetail('${productId}','${p.id}')">
+      <h4>${i+1}. ${p.title}</h4>
+      <p>${p.overview.substring(0,80)}…</p>
+      <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">
+        ${p.techStack.slice(0,3).map(t=>`<span class="tech-tag">${t}</span>`).join('')}
+        ${p.techStack.length>3?`<span class="tech-tag">+${p.techStack.length-3}</span>`:''}
+      </div>
+    </div>`;
+  });
+  h+='</div>';
+  prod.projects.forEach((p,i)=>{
+    h+=renderProjectCard(productId,p,i+1);
+  });
+  main.innerHTML=h; renderSidebar(); window.scrollTo(0,0);
+}
+
+function showProjectDetail(productId,projectId) {
+  const prod=PRODUCTS[productId];
+  const proj=prod.projects.find(p=>p.id===projectId);
+  activeMode='projects'; currentProduct=productId; currentProject=projectId;
+  const main=document.getElementById('main');
+  main.innerHTML=`
+    <div style="margin-bottom:12px;display:flex;gap:8px">
+      <button onclick="showProjectsHome()" style="background:none;border:none;color:var(--sf-blue);cursor:pointer;font-size:13px">← All Products</button>
+      <span style="color:var(--muted)">›</span>
+      <button onclick="showProductProjects('${productId}')" style="background:none;border:none;color:var(--sf-blue);cursor:pointer;font-size:13px">${prod.title}</button>
+    </div>
+    ${renderProjectCard(productId,proj,null,true)}`;
+  renderSidebar(); window.scrollTo(0,0);
+}
+
+function renderProjectCard(productId,proj,num,expanded=false) {
+  const prod=PRODUCTS[productId];
+  return `<div class="project-overview-card" id="proj-${proj.id}" style="${expanded?'':'margin-bottom:20px'}">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,${prod.darkColor||'#032D60'},${prod.color});display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;flex-shrink:0">${prod.icon}</div>
+      <div>
+        ${num?`<div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px">Project ${num}</div>`:''}
+        <h2 style="font-size:18px;font-weight:800">${proj.title}</h2>
+      </div>
+    </div>
+    <p style="font-size:14px;line-height:1.7;color:var(--muted);margin-bottom:14px">${proj.overview}</p>
+    <div class="project-meta-row">
+      <div class="project-meta-item"><b>Duration</b>${proj.duration}</div>
+      <div class="project-meta-item"><b>Difficulty</b>${proj.difficulty}</div>
+      <div class="project-meta-item"><b>Cloud</b>${prod.title}</div>
+      <div class="project-meta-item"><b>Team Size</b>${proj.teamSize||'1-3 Devs'}</div>
+    </div>
+    <div class="syntax-label" style="margin-top:14px">Tech Stack</div>
+    <div class="tech-tags">${proj.techStack.map(t=>`<span class="tech-tag">${t}</span>`).join('')}</div>
+
+    <div class="steps-section" style="margin-top:20px">
+      <h3>📋 Implementation Steps</h3>
+      ${proj.steps.map((s,i)=>`
+        <div class="step-item">
+          <div class="step-num">${i+1}</div>
+          <div class="step-content">
+            <h4>${s.title}</h4>
+            <p>${s.detail}</p>
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <div class="approach-card" style="margin-top:0">
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:10px">🏗️ Architecture & Approach</h3>
+      <p style="font-size:13.5px;line-height:1.7;color:var(--muted)">${proj.approach}</p>
+      ${proj.architecture?`<div class="arch-grid">${proj.architecture.map(a=>`<div class="arch-item"><h4>${a.layer}</h4><p>${a.detail}</p></div>`).join('')}</div>`:''}
+    </div>
+
+    <div style="margin-top:16px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:10px">✅ Key Deliverables</h3>
+      <ul class="deliverables-list">${proj.deliverables.map(d=>`<li>${d}</li>`).join('')}</ul>
+    </div>
+    ${!expanded?`<div style="margin-top:16px"><button onclick="showProjectDetail('${productId}','${proj.id}')" style="background:var(--sf-blue);color:#fff;border:none;border-radius:8px;padding:8px 18px;cursor:pointer;font-size:13px;font-weight:600">View Full Details →</button></div>`:''}
+  </div>`;
+}
+
+// ──────────────────────────────────────────────────────────────
+// CERTIFICATIONS
+// ──────────────────────────────────────────────────────────────
+function showCertsHome() {
+  activeMode='certs'; currentCert=null;
+  const main=document.getElementById('main');
+  let h=`<div class="cert-hero">
+    <h1 style="font-size:26px;font-weight:800;margin-bottom:6px">🏆 Salesforce Certifications</h1>
+    <p style="opacity:.85;font-size:14px;line-height:1.6;max-width:600px">Study guides, exam breakdowns by topic weight, and interactive practice Q&amp;A with answer explanations for all major Salesforce certifications.</p>
+    <div class="stats-row">
+      <span class="stat-chip">${Object.keys(CERTS).length} Certifications</span>
+      <span class="stat-chip">${Object.values(CERTS).reduce((n,c)=>n+c.questions.length,0)} Practice Questions</span>
+      <span class="stat-chip">Full Explanations</span>
+    </div>
+  </div>
+  <div class="cert-grid">`;
+  Object.values(CERTS).forEach(c=>{
+    h+=`<div class="cert-card" onclick="showCert('${c.id}')">
+      <div class="cert-badge">${c.icon}</div>
+      <h3>${c.title}</h3>
+      <p>${c.subtitle}</p>
+      <div class="exam-stats-row">
+        <span class="exam-stat">📝 ${c.examInfo.questions} Q</span>
+        <span class="exam-stat">🎯 ${c.examInfo.passing}% Pass</span>
+        <span class="exam-stat">⏱️ ${c.examInfo.time}</span>
+        <span class="exam-stat">💰 ${c.examInfo.cost}</span>
+      </div>
+    </div>`;
+  });
+  h+='</div>';
+  main.innerHTML=h; renderSidebar();
+}
+
+function showCert(certId) {
+  const cert=CERTS[certId];
+  activeMode='certs'; currentCert=certId;
+  const main=document.getElementById('main');
+
+  const topicWeights = cert.topics.map(t=>{
+    const pct=parseInt(t.weight);
+    return `<li class="topic-weight-item">
+      <span class="tw-name">${t.name}</span>
+      <div class="tw-bar-bg"><div class="tw-bar" style="width:${pct}%"></div></div>
+      <span class="tw-pct">${t.weight}</span>
+    </li>`;
+  }).join('');
+
+  const studyTips = cert.studyTips.map(s=>`<li>${s}</li>`).join('');
+
+  const qaItems = cert.questions.map((q,i)=>`
+    <div class="qa-item" id="qa-${certId}-${i}">
+      <div class="qa-num">Question ${i+1} of ${cert.questions.length}</div>
+      <div class="qa-q">${q.q}</div>
+      <div class="qa-opts" id="opts-${certId}-${i}">
+        ${q.opts.map((opt,j)=>{
+          const letter=String.fromCharCode(65+j);
+          return `<button class="qa-opt" onclick="answerQ('${certId}',${i},'${letter}')" data-letter="${letter}">
+            <span class="opt-letter">${letter}</span> ${opt}
+          </button>`;
+        }).join('')}
+      </div>
+      <button class="qa-reveal-btn" onclick="revealQ('${certId}',${i})">👁 Reveal Answer</button>
+      <div class="qa-exp" id="exp-${certId}-${i}"><b>✅ Correct Answer: ${q.ans}</b> — ${q.exp}</div>
+    </div>`).join('');
+
+  main.innerHTML = `
+    <div style="margin-bottom:12px">
+      <button onclick="showCertsHome()" style="background:none;border:none;color:var(--sf-blue);cursor:pointer;font-size:13px">← Back to Certifications</button>
+    </div>
+    <div class="cert-hero" style="margin-bottom:20px">
+      <div style="font-size:40px;margin-bottom:10px">${cert.icon}</div>
+      <h1 style="font-size:24px;font-weight:800;margin-bottom:4px">${cert.title}</h1>
+      <p style="opacity:.85;font-size:14px">${cert.subtitle}</p>
+    </div>
+
+    <div class="topic-card" style="margin-bottom:20px">
+      <div class="tabs">
+        <button class="tab-btn active" id="ctab-${certId}-overview" onclick="switchCertTab('${certId}','overview')">📋 Exam Overview</button>
+        <button class="tab-btn"        id="ctab-${certId}-topics"   onclick="switchCertTab('${certId}','topics')">📊 Topic Weights</button>
+        <button class="tab-btn"        id="ctab-${certId}-study"    onclick="switchCertTab('${certId}','study')">📚 Study Guide</button>
+        <button class="tab-btn"        id="ctab-${certId}-qa"       onclick="switchCertTab('${certId}','qa')">❓ Practice Q&amp;A (${cert.questions.length})</button>
+      </div>
+
+      <div class="tab-content active" id="ctc-${certId}-overview">
+        <div class="exam-info-grid">
+          <div class="exam-info-box"><div class="val">${cert.examInfo.questions}</div><div class="lbl">Questions</div></div>
+          <div class="exam-info-box"><div class="val">${cert.examInfo.passing}%</div><div class="lbl">Passing Score</div></div>
+          <div class="exam-info-box"><div class="val">${cert.examInfo.time}</div><div class="lbl">Time Limit</div></div>
+          <div class="exam-info-box"><div class="val">${cert.examInfo.cost}</div><div class="lbl">Exam Cost</div></div>
+          <div class="exam-info-box"><div class="val">${cert.examInfo.format||'MCQ'}</div><div class="lbl">Format</div></div>
+          <div class="exam-info-box"><div class="val">${cert.examInfo.level||'Associate'}</div><div class="lbl">Level</div></div>
+        </div>
+        <div class="callout callout-info"><b>About this Certification:</b> ${cert.about}</div>
+        <div class="callout callout-success" style="margin-top:12px"><b>Who should take this?</b> ${cert.audience}</div>
+        <div class="callout callout-warn" style="margin-top:12px"><b>Prerequisites:</b> ${cert.prereqs}</div>
+      </div>
+
+      <div class="tab-content" id="ctc-${certId}-topics">
+        <div class="callout callout-info" style="margin-bottom:16px"><b>Exam Topic Breakdown</b> — Focus more study time on higher-weighted topics.</div>
+        <ul class="topic-weight-list">${topicWeights}</ul>
+      </div>
+
+      <div class="tab-content" id="ctc-${certId}-study">
+        <div class="callout callout-info" style="margin-bottom:16px"><b>Study Approach:</b> ${cert.studyApproach}</div>
+        <ul class="study-tips-list">${studyTips}</ul>
+      </div>
+
+      <div class="tab-content" id="ctc-${certId}-qa">
+        <div class="qa-header-bar">
+          <h3>Practice Questions</h3>
+          <span class="qa-progress" id="qa-score-${certId}">0 / ${cert.questions.length} answered</span>
+        </div>
+        <div class="callout callout-info" style="margin-bottom:16px">Click an option to check your answer, or use "Reveal Answer" to see the explanation without guessing.</div>
+        <div class="qa-section">${qaItems}</div>
+      </div>
+    </div>`;
+  renderSidebar(); window.scrollTo(0,0);
+}
+
+function switchCertTab(certId,tab){
+  ['overview','topics','study','qa'].forEach(t=>{
+    const b=document.getElementById(`ctab-${certId}-${t}`);
+    const c=document.getElementById(`ctc-${certId}-${t}`);
+    if(b) b.classList.toggle('active',t===tab);
+    if(c) c.classList.toggle('active',t===tab);
+  });
+}
+
+// Track answers per cert
+const qaAnswers={};
+function answerQ(certId,idx,selected){
+  if(!qaAnswers[certId]) qaAnswers[certId]={};
+  if(qaAnswers[certId][idx]!==undefined) return; // already answered
+  const cert=CERTS[certId];
+  const correct=cert.questions[idx].ans;
+  qaAnswers[certId][idx]=selected;
+  const optsEl=document.getElementById(`opts-${certId}-${idx}`);
+  [...optsEl.querySelectorAll('.qa-opt')].forEach(btn=>{
+    btn.disabled=true;
+    const letter=btn.dataset.letter;
+    if(letter===correct) btn.classList.add('correct');
+    else if(letter===selected && selected!==correct) btn.classList.add('wrong');
+  });
+  document.getElementById(`exp-${certId}-${idx}`).classList.add('visible');
+  document.getElementById(`qa-${certId}-${idx}`).classList.add('answered');
+  // Update score
+  const answered=Object.keys(qaAnswers[certId]).length;
+  const scoreEl=document.getElementById(`qa-score-${certId}`);
+  if(scoreEl) scoreEl.textContent=`${answered} / ${cert.questions.length} answered`;
+}
+function revealQ(certId,idx){
+  const cert=CERTS[certId];
+  const correct=cert.questions[idx].ans;
+  const optsEl=document.getElementById(`opts-${certId}-${idx}`);
+  [...optsEl.querySelectorAll('.qa-opt')].forEach(btn=>{
+    btn.disabled=true;
+    if(btn.dataset.letter===correct) btn.classList.add('correct');
+  });
+  document.getElementById(`exp-${certId}-${idx}`).classList.add('visible');
+}
+
+// ──────────────────────────────────────────────────────────────
+// SEARCH
+// ──────────────────────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input',function(){
+  const q=this.value.trim().toLowerCase();
+  if(!q){renderHome();return;}
+  const results=[];
+  // Search Apex/LWC
+  Object.values(DATA).forEach(sec=>{
+    sec.topics.forEach(t=>{
+      const hay=[t.title,t.desc,...t.best,...t.limits,...t.opt,t.syntax].join(' ').toLowerCase();
+      if(hay.includes(q)) results.push({type:'apex',label:sec.title,sectionId:sec.id,item:t,icon:t.icon,title:t.title,desc:t.desc.substring(0,120),click:`showTopic('${sec.id}','${t.id}')`});
+    });
+  });
+  // Search Projects
+  Object.values(PRODUCTS).forEach(prod=>{
+    prod.projects.forEach(p=>{
+      const hay=[prod.title,p.title,p.overview,...p.techStack,...p.deliverables].join(' ').toLowerCase();
+      if(hay.includes(q)) results.push({type:'project',label:'Project: '+prod.title,item:p,icon:prod.icon,title:p.title,desc:p.overview.substring(0,120),click:`showProjectDetail('${prod.id}','${p.id}')`});
+    });
+  });
+  // Search Certs
+  Object.values(CERTS).forEach(c=>{
+    const hay=[c.title,c.subtitle,c.about,...c.studyTips,...c.questions.map(q=>q.q)].join(' ').toLowerCase();
+    if(hay.includes(q)) results.push({type:'cert',label:'Certification',item:c,icon:c.icon,title:c.title,desc:c.subtitle,click:`showCert('${c.id}')`});
+  });
+  renderSearchResults(q,results);
+});
+
+function renderSearchResults(q,results){
+  const main=document.getElementById('main');
+  if(!results.length){main.innerHTML=`<div style="padding:32px;text-align:center;color:var(--muted)">No results for "<strong>${q}</strong>"</div>`;return;}
+  let h=`<div style="font-size:14px;color:var(--muted);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">Found <strong>${results.length}</strong> result${results.length>1?'s':''} for "<strong>${q}</strong>"</div>`;
+  results.forEach(r=>{
+    h+=`<div class="topic-card" style="cursor:pointer;margin-bottom:14px" onclick="${r.click}">
+      <div class="topic-header">
+        <div class="topic-icon">${r.icon}</div>
+        <div class="topic-meta">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:3px">${r.label}</div>
+          <div class="topic-title">${hilite(r.title,q)}</div>
+          <div class="topic-desc">${hilite(r.desc,q)}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+  main.innerHTML=h;
+}
+
+function hilite(text,q){
+  const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');
+  return text.replace(re,m=>`<span class="search-highlight">${m}</span>`);
+}
+
+// ──────────────────────────────────────────────────────────────
+// UTILS
+// ──────────────────────────────────────────────────────────────
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function copyCode(btn){
+  const code=btn.closest('.code-wrap').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{
+    btn.textContent='Copied!'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+function toggleTheme(){
+  document.body.classList.toggle('dark');
+  document.querySelector('.theme-btn').textContent=document.body.classList.contains('dark')?'☀️ Light':'🌙 Dark';
+}
+
+// ──────────────────────────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────────────────────────
+hljs.configure({ignoreUnescapedHTML:true});
+renderHome();
+</script>
+</body>
+</html>
