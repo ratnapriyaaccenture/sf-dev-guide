@@ -4,50 +4,6 @@ A comprehensive **offline Salesforce reference web app** covering Apex Classes, 
 
 ---
 
-## Screenshots
-
-All screenshots are in the [`Screenshots/`](./Screenshots/) folder.  
-Videos (MP4 + MOV) are in the [`Videos/`](./Videos/) folder.
-
-| # | File | What it shows |
-|---|------|---------------|
-| 01 | `01_home.png` | Home page viewport |
-| 01 | `01_home_full.png` | Full scrollable home page |
-| 02 | `02_apex_classes_home.png` | Apex Classes topic grid |
-| 03 | `03_apex_class_declaration.png` | Class Declaration topic — Overview tab |
-| 04 | `04_apex_code_example.png` | Class Declaration — Code Example (syntax-highlighted) |
-| 05 | `05_apex_gov_limits.png` | Class Declaration — Governor Limits tab |
-| 06 | `06_soql_queries.png` | SOQL Queries topic overview + syntax |
-| 07 | `07_apex_triggers_home.png` | Apex Triggers topic grid |
-| 08 | `08_trigger_handler_framework.png` | Trigger Handler Framework topic |
-| 09 | `09_lwc_home.png` | LWC topic grid |
-| 10 | `10_lwc_wire_service.png` | @wire Service & Adapters syntax |
-| 11 | `11_projects_home.png` | Project Ideas — all 7 clouds |
-| 12 | `12_projects_sales_cloud.png` | Sales Cloud Projects (3 projects) |
-| 13 | `13_projects_health_cloud.png` | Health Cloud Projects (3 projects) |
-| 14 | `14_projects_data_cloud.png` | Data Cloud Projects (3 projects) |
-| 15 | `15_certifications_home.png` | Certifications home — all 16 certs |
-| 16 | `16_cert_admin_detail.png` | Admin cert — Exam Overview tab |
-| 17 | `17_cert_admin_qa.png` | Admin cert — Practice Q&A tab |
-| 18 | `18_cert_qa_answered.png` | Q&A interaction — correct answer + explanation |
-| 19 | `19_cert_agentforce.png` | Agentforce Specialist cert detail |
-| 20 | `20_cert_ai_specialist.png` | Salesforce AI Specialist cert detail |
-| 21 | `21_cert_pdi_topic_weights.png` | PDI — Topic Weights with progress bars |
-| 22 | `22_dark_mode_cert.png` | Dark mode — PDI Topic Weights |
-
----
-
-## Videos
-
-| File | Format | Duration | Description |
-|------|--------|----------|-------------|
-| `sf_dev_guide_walkthrough.mp4` | MP4 (mp4v) | ~96 sec | Full walkthrough of all sections |
-| `sf_dev_guide_walkthrough.mov` | MOV (mp4v) | ~96 sec | Same walkthrough in QuickTime format |
-
-Each screenshot is held for 4 seconds. Covers: Home → Apex Classes → Triggers → LWC → Projects → Certifications → Q&A → Dark Mode.
-
----
-
 ## Project Structure
 
 ```
@@ -63,7 +19,28 @@ sf-dev-guide/
 
 ---
 
+## Videos
+
+| File | Format | Duration | Description |
+|------|--------|----------|-------------|
+| `sf_dev_guide_walkthrough.mp4` | MP4 (mp4v) | ~96 sec | Full walkthrough of all sections |
+| `sf_dev_guide_walkthrough.mov` | MOV (mp4v) | ~96 sec | Same walkthrough in QuickTime format |
+
+Each screenshot is held for 4 seconds. Covers: Home → Apex Classes → Triggers → LWC → Projects → Certifications → Q&A → Dark Mode.
+
+---
+
 ## Functionality Overview
+
+---
+
+### Home
+
+![Home Page](./Screenshots/01_home.png)
+
+![Home Page — Full Scroll](./Screenshots/01_home_full.png)
+
+---
 
 ### 1. Apex Classes (10 Topics)
 
@@ -91,6 +68,16 @@ Each topic includes: **Syntax formula**, **Code Example** (real-world project co
 | Heap size | 6 MB | 12 MB |
 | CPU time | 10 sec | 60 sec |
 | Callouts | 100 | 100 |
+
+![Apex Classes — Topic Grid](./Screenshots/02_apex_classes_home.png)
+
+![Class Declaration — Overview Tab](./Screenshots/03_apex_class_declaration.png)
+
+![Class Declaration — Code Example](./Screenshots/04_apex_code_example.png)
+
+![Class Declaration — Governor Limits Tab](./Screenshots/05_apex_gov_limits.png)
+
+![SOQL Queries — Overview + Syntax](./Screenshots/06_soql_queries.png)
 
 ---
 
@@ -121,6 +108,10 @@ for (Child__c c : Trigger.new) {
     // use p safely
 }
 ```
+
+![Apex Triggers — Topic Grid](./Screenshots/07_apex_triggers_home.png)
+
+![Trigger Handler Framework](./Screenshots/08_trigger_handler_framework.png)
 
 ---
 
@@ -161,6 +152,10 @@ export default class MyComp extends LightningElement {
 }
 ```
 
+![LWC — Topic Grid](./Screenshots/09_lwc_home.png)
+
+![@wire Service & Adapters](./Screenshots/10_lwc_wire_service.png)
+
 ---
 
 ### 4. Project Ideas (21 Projects across 7 Clouds)
@@ -184,6 +179,14 @@ Each project includes:
 - **Implementation Steps** — detailed numbered steps
 - **Architecture** — layer-by-layer design
 - **Deliverables** — what the completed project produces
+
+![Project Ideas — All 7 Clouds](./Screenshots/11_projects_home.png)
+
+![Sales Cloud Projects](./Screenshots/12_projects_sales_cloud.png)
+
+![Health Cloud Projects](./Screenshots/13_projects_health_cloud.png)
+
+![Data Cloud Projects](./Screenshots/14_projects_data_cloud.png)
 
 ---
 
@@ -215,6 +218,22 @@ Each certification page includes:
 - **Topic Weights** — visual progress bars for each exam domain
 - **Study Guide** — approach + 10 targeted study tips
 - **Practice Q&A** — interactive questions with click-to-answer, color-coded correct/wrong, full explanations, and per-cert score counter
+
+![Certifications Home — All 16 Certs](./Screenshots/15_certifications_home.png)
+
+![Admin Cert — Exam Overview Tab](./Screenshots/16_cert_admin_detail.png)
+
+![Admin Cert — Practice Q&A Tab](./Screenshots/17_cert_admin_qa.png)
+
+![Q&A Interaction — Correct Answer + Explanation](./Screenshots/18_cert_qa_answered.png)
+
+![Agentforce Specialist Cert Detail](./Screenshots/19_cert_agentforce.png)
+
+![Salesforce AI Specialist Cert Detail](./Screenshots/20_cert_ai_specialist.png)
+
+![PDI — Topic Weights with Progress Bars](./Screenshots/21_cert_pdi_topic_weights.png)
+
+---
 
 #### Agentforce Specialist — Key Concepts
 
@@ -260,7 +279,13 @@ Response shown to user
 
 ---
 
-### 6. Interactive Features
+### 6. Dark Mode
+
+![Dark Mode — PDI Topic Weights](./Screenshots/22_dark_mode_cert.png)
+
+---
+
+### 7. Interactive Features
 
 | Feature | How it works |
 |---------|-------------|
