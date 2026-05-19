@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip list *)",
+      "Bash(where ffmpeg *)",
+      "Bash(python *)",
+      "Bash(ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers=1 Videos\\\\sf_dev_guide_narrated.mp4)",
+      "Bash(ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers=1 \"Videos/sf_dev_guide_narrated.mp4\")"
+    ]
+  }
+}
